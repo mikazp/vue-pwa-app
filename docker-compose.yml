@@ -1,0 +1,26 @@
+version: '3.7'
+
+services:
+  node:
+    image: node:10-alpine
+    volumes:
+      - ./app:/app
+    environment:
+      - VUE_APP_HOST
+    entrypoint: npm run watch
+    working_dir: /app
+
+  web:
+    image: nginx:alpine
+    depends_on:
+      - node
+    volumes:
+      - ./docker/dev/web/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./app:/app
+    labels:
+      - SERVICE_NAME=app
+    environment:
+    # used for proxy https://github.com/jwilder/nginx-proxy
+      - VIRTUAL_HOST=${VUE_APP_HOST}
+    expose:
+      - 80
