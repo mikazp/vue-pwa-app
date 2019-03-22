@@ -11,15 +11,19 @@ endif
 
 help:
 	@echo ""
-	@echo "usage: make COMMAND"
+	@echo "usage: make [env=(dev|prod)] COMMAND"
 	@echo ""
 	@echo "Commands:"
 	@echo "  start              Start   docker containers"
-	@echo "  restart            Restart docker containers"
 	@echo "  build              Build docker containers"
-	@echo "  recreate           Recreate docker containers"
-	@echo "  bash               Php container console"
-	@echo "  root               Php container console with root user"
+	@echo "  install            Install npm dependencies"
+	@echo "  restart            Restart docker containers"
+	@echo "  bash               Enter app container console"
+	@echo "  root               Enter app container console with root user"
+	@echo "  pull               Pull images by image name from registry"
+	@echo "  push               Push image to registry"
+	@echo "  test               Run tests"
+	@echo "  clear              Stop and remove all containers and images"
 
 start:
 	@$(compose) up -d
@@ -53,3 +57,6 @@ push:
 
 test:
 	@$(compose) run --user=$(DEV_UID) --entrypoint='' --rm $(APP_SERVICE) npm run test:unit
+
+clear:
+	@$(compose) down --rmi all
